@@ -7,33 +7,103 @@
 
 //Import das dependencias do projeto 
 
-//Dependencia para criar as requisições da API
 const express = require('express');
 
-//Dependencia para gerenciar as permissões da API
 const cors = require('cors');
 
-//Dependencia para gerenciar o corpo das requisições da API
 const bodyParser = require('body-parser');
 
-//Import do arquivo no módulo (funções)
-const contatos = require('./modulo/contatos.js');
+const jsonContacts = require('./modulo/functionsContacts')
+
 const { json } = require('body-parser');
 
-app.use((request, response, next) => {
-    //API publica -> fica disponível para utilização de qualquer aplicação
-    //API privada -> somente o IP informado poderá consumir dados da API
+const app = express()
 
-    //Define se a API será publica ou privada (* significa que a API é publica)
+app.use((request, response, next) => {
     response.header('Acess-Control-Allow-Origin', '*');
 
-    //Permite definir quais métodos poderão ser utilizados nas requisições
     response.header('Acess-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 
-    //Envia para o cors() as regras de permissões 
     app.use(cors());
 
-    //Passar para o próximo CallBack e não encerrar a API
     next();
 })
 
+//EndPoint: lista as conversas e contatos do usuário filtrando pelo ID
+app.get('/v1/whatsapp/profile/id/:id', cors(), async function (request, response, next) {
+
+    let statusCode;
+    let profileId = request.params.id;
+    let dataProfile = {}
+
+    if (profileId == '' || profileId == undefined || profileId < 1 || profileId > 4 || profileId.length !=1 || isNaN(profileId)) {
+        statusCode = 400;
+        dataProfile.message = 'Não foi possível processar, pois os dados enviados não podem estar vazio ou necessitam ser entre 1 e 4.'
+    } else {
+        let contacts = jsonContacts.getProfileId(profileId)
+
+        if (contacts) {
+            statusCode = 200;
+            dataProfile = contacts;
+        } else {
+            statusCode = 400;
+        }
+    }
+
+    response.status(statusCode)
+    response.json(dataProfile)
+})
+
+//EndPoint: lista as conversas e contatos do usuário filtrando pelo NÚMERO de celular
+app.get('/v1/whatsapp/profile/number/:number', cors(), async function (request, response, next) {
+
+    let statusCode;
+    let profileNumber = request.params.number;
+    let dataProfile = {}
+
+    if (profileNumber == '' || profileNumber == undefined || profileNumber.length < 11 || isNaN(profileNumber)) {
+        statusCode = 400;
+        dataProfile.message = 'Não foi possível processar, pois os dados enviados não podem estar vazio ou necessitam ter 11 numeros.'
+    } else {
+        let contacts = jsonContacts.getProfileNumber(profileNumber)
+
+        if (contacts) {
+            statusCode = 200;
+            dataProfile = contacts;
+        } else {
+            statusCode = 400;
+        }
+    }
+
+    response.status(statusCode)
+    response.json(dataProfile)
+})
+
+//EndPoint: lista as conversas e contatos do usuário filtrando pelo NOME
+app.get('/v1/whatsapp/profile/name/:name', cors(), async function (request, response, next) {
+
+    let statusCode;
+    let profileName = request.params.name;
+    let dataProfile = {}
+
+    if (profileName == '' || profileName == undefined || !isNaN(profileName)) {
+        statusCode = 400;
+        dataProfile.message = 'Não foi possível processar, pois os dados enviados não podem estar vazio.'
+    } else {
+        let contacts = jsonContacts.getProfileName(profileName)
+
+        if (contacts) {
+            statusCode = 200;
+            dataProfile = contacts;
+        } else {
+            statusCode = 400;
+        }
+    }
+
+    response.status(statusCode)
+    response.json(dataProfile)
+})
+
+app.listen(8080, function() {
+    console.log('Servidor aguardando requisições na porta 8080.')
+})
