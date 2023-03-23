@@ -16,7 +16,7 @@ const getProfileId = function (id) {
 
     arquivoContatos.contatos["whats-users"].forEach(dataContacts => {
         if (dataContacts.id == contactId) {
-            jsonProfileList.contacts = dataContacts.contacts
+            jsonProfileList = dataContacts.contacts
                 status = true
             }
         })
@@ -38,7 +38,7 @@ const getProfileNumber = function (number) {
 
     arquivoContatos.contatos["whats-users"].forEach(dataContacts => {
         if (dataContacts.number == contactNumber) {
-            jsonProfileList.contacts = dataContacts.contacts
+            jsonProfileList = dataContacts.contacts
                 status = true
             }
         })
@@ -61,7 +61,7 @@ const getProfileName = function (name) {
 
     arquivoContatos.contatos["whats-users"].forEach(dataContacts => {
         if (dataContacts.account == contactName) {
-            jsonProfileList.contacts = dataContacts.contacts
+            jsonProfileList = dataContacts.contacts
                 status = true
             }
         })
