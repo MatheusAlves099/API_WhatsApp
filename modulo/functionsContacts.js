@@ -75,9 +75,97 @@ const getProfileName = function (name) {
 
 // console.log(getProfileName('Sandy Wilstern'))
 
+/*********** Função 4 -> para puxar as fotos de perfil de cada usuário pelo ID *********/
+const getProfileImageId = function (idUser) {
+    let jsonProfileList = {};
+    let status = false;
+
+    arquivoContatos.contatos["whats-users"].forEach(dataContacts => {
+        if (dataContacts.id == idUser) {
+            jsonProfileList = dataContacts['profile-image']
+                status = true
+            }
+        })
+
+    if (status == true) {
+        return jsonProfileList;
+    } else { 
+        return status;
+    }
+}
+
+// console.log(getProfileImageId(1))
+
+/*********** Função 5 -> para puxar as fotos de perfil de cada usuário pelo NUMERO *********/
+const getProfileImageNumber = function (numberUser) {
+    let jsonProfileList = {};
+    let status = false;
+
+    arquivoContatos.contatos["whats-users"].forEach(dataContacts => {
+        if (dataContacts.number == numberUser) {
+            jsonProfileList = dataContacts['profile-image']
+                status = true
+            }
+        })
+
+    if (status == true) {
+        return jsonProfileList;
+    } else { 
+        return status;
+    }
+}
+
+// console.log(getProfileImageNumber('11987876567'))
+
+/*********** Função 6 -> para puxar as fotos de perfil de cada usuário pelo NOME *********/
+const getProfileImageName = function (nameUser) {
+    let jsonProfileList = {};
+    let status = false;
+
+    arquivoContatos.contatos["whats-users"].forEach(dataContacts => {
+        if (dataContacts.account == nameUser) {
+            jsonProfileList = dataContacts['profile-image']
+                status = true
+            }
+        })
+
+    if (status == true) {
+        return jsonProfileList;
+    } else { 
+        return status;
+    }
+}
+
+// console.log(getProfileImageName('Ricardo da Silva'))
+
+/*********** Função 7 -> para puxar as cores de background de cada usuário pelo ID *********/
+const getProfileBackground = function (idUser) {
+    let jsonProfileList = {};
+    let status = false;
+
+    arquivoContatos.contatos["whats-users"].forEach(dataContacts => {
+        if (dataContacts.id == idUser) {
+            jsonProfileList = dataContacts['background']
+                status = true
+            }
+        })
+
+    if (status == true) {
+        return jsonProfileList;
+    } else { 
+        return status;
+    }
+}
+
+// console.log(getProfileBackground(1))
+
 //Para exportar as funções
 module.exports = {
     getProfileId,
     getProfileNumber,
-    getProfileName
+    getProfileName,
+    getProfileImageId,
+    getProfileImageNumber,
+    getProfileImageName,
+    getProfileBackground
 }
